@@ -2673,7 +2673,7 @@ namespace KOTORModSync.Core.Services
                 {
                     // Try case-insensitive match
                     string caseInsensitiveKey = dict.Keys.FirstOrDefault(
-                        k => !(k is null) && k.Equals(key, StringComparison.Ordinal)
+                        k => !(k is null) && k.Equals(key, StringComparison.OrdinalIgnoreCase)
                     );
                     if (
                         caseInsensitiveKey != null
