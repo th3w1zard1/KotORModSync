@@ -13,6 +13,7 @@ namespace KOTORModSync.Tests.Services.DistributedCache
     /// Integration tests for seeding functionality using Docker containers (Relay / Cascade).
     /// </summary>
     [Collection("DistributedCache")]
+    [Trait("Category", "Slow")]
     public class SeedingIntegrationTests : IClassFixture<DistributedCacheTestFixture>
     {
         private readonly DistributedCacheTestFixture _fixture;

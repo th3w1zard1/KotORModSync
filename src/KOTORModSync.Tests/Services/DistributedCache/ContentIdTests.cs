@@ -13,6 +13,7 @@ namespace KOTORModSync.Tests.Services.DistributedCache
     /// Tests for ContentId generation, idempotency, and collision detection.
     /// </summary>
     [Collection("DistributedCache")]
+    [Trait("Category", "Slow")]
     public class ContentIdTests : IClassFixture<DistributedCacheTestFixture>, IDisposable
     {
         private readonly DistributedCacheTestFixture _fixture;

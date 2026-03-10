@@ -53,7 +53,7 @@ namespace KOTORModSync.Tests.HeadlessUITests
         private static async Task PumpEventsAsync()
         {
             await Dispatcher.UIThread.InvokeAsync(() => { }, DispatcherPriority.Background);
-            await Task.Delay(50);
+            await Dispatcher.UIThread.InvokeAsync(() => { }, DispatcherPriority.ApplicationIdle);
         }
 
         private static async Task CloseWindowAsync(Window window)

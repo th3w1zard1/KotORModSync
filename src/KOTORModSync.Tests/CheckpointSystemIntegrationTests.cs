@@ -834,6 +834,7 @@ namespace KOTORModSync.Tests
 
 		[Test]
 		[Category("Performance")]
+		[Category("Slow")]
 		[CancelAfter(300000)]
 		public async Task CheckpointService_PerformanceTest_50Mods()
 		{

@@ -16,6 +16,7 @@ namespace KOTORModSync.Tests.Services.DistributedCache
     /// Tests for metadata consistency, persistence, and integrity.
     /// </summary>
     [Collection("DistributedCache")]
+    [Trait("Category", "Slow")]
     public class MetadataConsistencyTests : IClassFixture<DistributedCacheTestFixture>
     {
         private readonly DistributedCacheTestFixture _fixture;
@@ -65,7 +66,7 @@ namespace KOTORModSync.Tests.Services.DistributedCache
             Assert.NotNull(payload);
             Assert.NotNull(payload.PieceHashes);
             Assert.Equal(expectedPieces, payload.PieceHashes.Count);
-            Assert.All(payload.PieceHashes, hash => 
+            Assert.All(payload.PieceHashes, hash =>
             {
                 Assert.NotNull(hash);
                 Assert.Equal(20, hash.Length);
@@ -126,7 +127,7 @@ namespace KOTORModSync.Tests.Services.DistributedCache
 
             Assert.NotNull(ids);
             Assert.Equal(5, ids.Count);
-            Assert.All(ids, id => 
+            Assert.All(ids, id =>
             {
                 Assert.NotNull(id);
                 Assert.Equal(40, id.Length);
@@ -185,7 +186,7 @@ namespace KOTORModSync.Tests.Services.DistributedCache
 
             Assert.NotNull(contentIds);
             Assert.Equal(10, contentIds.Count);
-            Assert.All(contentIds, id => 
+            Assert.All(contentIds, id =>
             {
                 Assert.NotNull(id);
                 Assert.Equal(40, id.Length);

@@ -12,6 +12,7 @@ namespace KOTORModSync.Tests.Services.DistributedCache
     /// Tests for distributed cache engine operations, statistics, and lifecycle.
     /// </summary>
     [Collection("DistributedCache")]
+    [Trait("Category", "Slow")]
     public class CacheEngineTests : IClassFixture<DistributedCacheTestFixture>, IDisposable
     {
         private readonly DistributedCacheTestFixture _fixture;

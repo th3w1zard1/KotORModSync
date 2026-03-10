@@ -16,6 +16,7 @@ namespace KOTORModSync.Tests.Services.DistributedCache
     /// Tests for error handling, edge cases, and resilience of the distributed cache system.
     /// </summary>
     [Collection("DistributedCache")]
+    [Trait("Category", "Slow")]
     public class ErrorHandlingAndEdgeCaseTests : IClassFixture<DistributedCacheTestFixture>, IDisposable
     {
         private readonly DistributedCacheTestFixture _fixture;
@@ -169,7 +170,7 @@ namespace KOTORModSync.Tests.Services.DistributedCache
             });
 
             Assert.Null(exception);
-            
+
             // Verify stats are returned (values may be 0 if not initialized)
             var stats = DownloadCacheOptimizer.GetNetworkCacheStats();
             Assert.True(stats.activeShares >= 0, "Active shares should be non-negative");
@@ -188,7 +189,7 @@ namespace KOTORModSync.Tests.Services.DistributedCache
             });
 
             Assert.Null(exception);
-            
+
             // Verify it was blocked (even if invalid format)
             bool isBlocked = DownloadCacheOptimizer.IsContentIdBlocked(invalidContentId);
             Assert.True(isBlocked, "Invalid ContentId should still be blocked");
@@ -292,9 +293,9 @@ namespace KOTORModSync.Tests.Services.DistributedCache
             Assert.Equal(10, results.Count);
             Assert.True(results.All(r => r != null), "All results should be non-null");
             Assert.True(results.All(r => r.Length == 40), "All ContentIds should be 40 characters");
-            Assert.True(results.All(r => System.Text.RegularExpressions.Regex.IsMatch(r, "^[0-9a-f]+$")), 
+            Assert.True(results.All(r => System.Text.RegularExpressions.Regex.IsMatch(r, "^[0-9a-f]+$")),
                 "All ContentIds should contain only hexadecimal digits");
-            Assert.True(results.All(r => string.Equals(r, results[0], StringComparison.Ordinal)), 
+            Assert.True(results.All(r => string.Equals(r, results[0], StringComparison.Ordinal)),
                 "All concurrent calls should produce identical ContentId");
         }
 
@@ -304,7 +305,7 @@ namespace KOTORModSync.Tests.Services.DistributedCache
             string file = _fixture.CreateTestFile("modified.bin", 10240);
             Assert.True(File.Exists(file), "Test file should exist");
             Assert.Equal(10240, new FileInfo(file).Length);
-            
+
             string id1 = _fixture.ComputeContentId(file);
             Assert.NotNull(id1);
             Assert.Equal(40, id1.Length);
@@ -320,7 +321,7 @@ namespace KOTORModSync.Tests.Services.DistributedCache
 
             Assert.Equal(10240, new FileInfo(file).Length);
             string id2 = _fixture.ComputeContentId(file);
-            
+
             Assert.NotNull(id2);
             Assert.Equal(40, id2.Length);
             Assert.NotEqual(id1, id2);
@@ -350,7 +351,7 @@ namespace KOTORModSync.Tests.Services.DistributedCache
         public void ErrorHandling_Stats_ConsistentFormat()
         {
             var allStats = new List<(int activeShares, long totalUploadBytes, int connectedSources)>();
-            
+
             for (int i = 0; i < 10; i++)
             {
                 (int activeShares, long totalUploadBytes, int connectedSources) stats = DownloadCacheOptimizer.GetNetworkCacheStats();
@@ -363,7 +364,7 @@ namespace KOTORModSync.Tests.Services.DistributedCache
 
             Assert.Equal(10, allStats.Count);
             // Stats should be consistent (may vary slightly, but should be reasonable)
-            Assert.All(allStats, s => 
+            Assert.All(allStats, s =>
             {
                 Assert.True(s.activeShares >= 0);
                 Assert.True(s.totalUploadBytes >= 0);
@@ -388,7 +389,7 @@ namespace KOTORModSync.Tests.Services.DistributedCache
                 _fixture.TestDataDirectory,
                 "alternating.bin",
                 data);
-            
+
             Assert.True(File.Exists(file), "Test file should exist");
 
             string contentId = _fixture.ComputeContentId(file);

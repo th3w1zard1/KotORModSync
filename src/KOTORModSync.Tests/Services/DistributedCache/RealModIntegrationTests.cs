@@ -18,6 +18,7 @@ namespace KOTORModSync.Tests.Services.DistributedCache
     /// Integration tests using real KOTOR mod build files.
     /// </summary>
     [Collection("DistributedCache")]
+    [Trait("Category", "Slow")]
     public class RealModIntegrationTests : IClassFixture<DistributedCacheTestFixture>, IDisposable
     {
         private readonly DistributedCacheTestFixture _fixture;

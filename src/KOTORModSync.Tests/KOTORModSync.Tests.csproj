@@ -13,6 +13,7 @@
     <OutputType>Exe</OutputType>
     <GenerateProgramFile>false</GenerateProgramFile>
     <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
+    <RunSettingsFilePath>$(MSBuildProjectDirectory)\KOTORModSync.Tests.runsettings</RunSettingsFilePath>
     <Version>$(KOTORModSyncVersion)</Version>
     <AssemblyVersion>$(KOTORModSyncAssemblyVersion)</AssemblyVersion>
     <FileVersion>$(KOTORModSyncFileVersion)</FileVersion>

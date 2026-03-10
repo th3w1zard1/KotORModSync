@@ -14,6 +14,7 @@ namespace KOTORModSync.Tests.Services.DistributedCache
     /// Tests for port management, persistence, and availability.
     /// </summary>
     [Collection("DistributedCache")]
+    [Trait("Category", "Slow")]
     public class PortManagementTests : IClassFixture<DistributedCacheTestFixture>, IDisposable
     {
         private readonly DistributedCacheTestFixture _fixture;
