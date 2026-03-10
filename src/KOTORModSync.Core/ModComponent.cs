@@ -1421,6 +1421,33 @@ namespace KOTORModSync.Core
                 throw;
             }
         }
+
+        public Task<InstallExitCode> ExecuteInstructionsAsync(
+            [NotNull][ItemNotNull] IReadOnlyList<ModComponent> componentsList,
+            [NotNull] Services.FileSystem.IFileSystemProvider fileSystemProvider)
+        {
+            return ExecuteInstructionsAsync(Instructions, componentsList, CancellationToken.None, fileSystemProvider);
+        }
+
+        public Task<InstallExitCode> ExecuteInstructionsAsync(
+            [NotNull][ItemNotNull] IReadOnlyList<ModComponent> componentsList,
+            [NotNull] Services.FileSystem.IFileSystemProvider _,
+            CancellationToken cancellationToken,
+            [NotNull] Services.FileSystem.IFileSystemProvider fileSystemProvider)
+        {
+            return ExecuteInstructionsAsync(Instructions, componentsList, cancellationToken, fileSystemProvider);
+        }
+
+        public Task<InstallExitCode> ExecuteInstructionsAsync(
+            [NotNull][ItemNotNull] ObservableCollection<Instruction> theseInstructions,
+            [NotNull][ItemNotNull] IReadOnlyList<ModComponent> componentsList,
+            CancellationToken cancellationToken,
+            [NotNull] Services.FileSystem.IFileSystemProvider fileSystemProvider,
+            CancellationToken _,
+            [NotNull] Services.FileSystem.IFileSystemProvider __)
+        {
+            return ExecuteInstructionsAsync(theseInstructions, componentsList, cancellationToken, fileSystemProvider);
+        }
         [NotNull]
         public static Dictionary<string, List<ModComponent>> GetConflictingComponents(
             [NotNull] List<Guid> dependencyGuids,

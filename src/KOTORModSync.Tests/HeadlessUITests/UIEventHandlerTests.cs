@@ -10,6 +10,7 @@ using Avalonia.Controls;
 using Avalonia.Headless.XUnit;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
+using Avalonia.VisualTree;
 using KOTORModSync;
 using KOTORModSync.Controls;
 using KOTORModSync.Core;
@@ -209,9 +210,9 @@ namespace KOTORModSync.Tests.HeadlessUITests
         {
             await Dispatcher.UIThread.InvokeAsync(() =>
             {
-                var component = new ModComponent 
-                { 
-                    Name = "Test", 
+                var component = new ModComponent
+                {
+                    Name = "Test",
                     Guid = Guid.NewGuid(),
                     IsSelected = true
                 };

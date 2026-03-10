@@ -36,7 +36,6 @@ namespace KOTORModSync.Tests
                 sourcePath = new DirectoryInfo(_modDirectory),
                 destinationPath = new DirectoryInfo(_kotorDirectory)
             };
-            MainConfig.Instance = _config;
         }
 
         [TearDown]
@@ -96,7 +95,7 @@ namespace KOTORModSync.Tests
                 instruction.SetParentComponent(component);
             }
 
-            var result = await component.ExecuteInstructionsAsync(new List<ModComponent> { component }, fileSystemProvider, System.Threading.CancellationToken.None, fileSystemProvider);
+            var result = await component.ExecuteInstructionsAsync(component.Instructions, new List<ModComponent> { component }, System.Threading.CancellationToken.None, fileSystemProvider);
 
             Assert.Multiple(() =>
             {
@@ -156,7 +155,7 @@ namespace KOTORModSync.Tests
                 instruction.SetParentComponent(component);
             }
 
-            var result = await component.ExecuteInstructionsAsync(new List<ModComponent> { component }, fileSystemProvider, System.Threading.CancellationToken.None, fileSystemProvider);
+            var result = await component.ExecuteInstructionsAsync(component.Instructions, new List<ModComponent> { component }, System.Threading.CancellationToken.None, fileSystemProvider);
 
             Assert.Multiple(() =>
             {
@@ -200,7 +199,7 @@ namespace KOTORModSync.Tests
                 instruction.SetParentComponent(component);
             }
 
-            var result = await component.ExecuteInstructionsAsync(new List<ModComponent> { component }, fileSystemProvider, System.Threading.CancellationToken.None, fileSystemProvider);
+            var result = await component.ExecuteInstructionsAsync(component.Instructions, new List<ModComponent> { component }, System.Threading.CancellationToken.None, fileSystemProvider);
 
             Assert.Multiple(() =>
             {
@@ -234,7 +233,7 @@ namespace KOTORModSync.Tests
                 instruction.SetParentComponent(component);
             }
 
-            var result = await component.ExecuteInstructionsAsync(new List<ModComponent> { component }, fileSystemProvider, System.Threading.CancellationToken.None, fileSystemProvider);
+            var result = await component.ExecuteInstructionsAsync(component.Instructions, new List<ModComponent> { component }, System.Threading.CancellationToken.None, fileSystemProvider);
 
             Assert.Multiple(() =>
             {
@@ -276,7 +275,7 @@ namespace KOTORModSync.Tests
                 instruction.SetParentComponent(component);
             }
 
-            var result = await component.ExecuteInstructionsAsync(new List<ModComponent> { component }, fileSystemProvider, System.Threading.CancellationToken.None, fileSystemProvider);
+            var result = await component.ExecuteInstructionsAsync(component.Instructions, new List<ModComponent> { component }, System.Threading.CancellationToken.None, fileSystemProvider);
 
             Assert.That(result, Is.Not.EqualTo(ModComponent.InstallExitCode.Success), 
                 "Component with all failed instructions should report failure");

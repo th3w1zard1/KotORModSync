@@ -99,7 +99,7 @@ namespace KOTORModSync.Tests
                 instruction.SetParentComponent(component);
             }
 
-            var result = await component.ExecuteInstructionsAsync(new List<ModComponent> { component }, fileSystemProvider, System.Threading.CancellationToken.None, fileSystemProvider);
+            var result = await component.ExecuteInstructionsAsync(component.Instructions, new List<ModComponent> { component }, System.Threading.CancellationToken.None, fileSystemProvider);
 
             Assert.Multiple(() =>
             {
@@ -156,7 +156,7 @@ namespace KOTORModSync.Tests
             }
 
             var result = await component.ExecuteInstructionsAsync(
-                new List<ModComponent> { depComponent, component }, fileSystemProvider, System.Threading.CancellationToken.None, fileSystemProvider);
+                component.Instructions, new List<ModComponent> { depComponent, component }, System.Threading.CancellationToken.None, fileSystemProvider);
 
             Assert.Multiple(() =>
             {
@@ -188,7 +188,7 @@ namespace KOTORModSync.Tests
             instruction.SetFileSystemProvider(fileSystemProvider);
             instruction.SetParentComponent(component);
 
-            var result = await component.ExecuteInstructionsAsync(new List<ModComponent> { component }, fileSystemProvider, System.Threading.CancellationToken.None, fileSystemProvider);
+            var result = await component.ExecuteInstructionsAsync(component.Instructions, new List<ModComponent> { component }, System.Threading.CancellationToken.None, fileSystemProvider);
 
             // Should handle null source gracefully
             Assert.That(result, Is.Not.Null, "Should return a result even with null source");
@@ -213,7 +213,7 @@ namespace KOTORModSync.Tests
             instruction.SetFileSystemProvider(fileSystemProvider);
             instruction.SetParentComponent(component);
 
-            var result = await component.ExecuteInstructionsAsync(new List<ModComponent> { component }, fileSystemProvider, System.Threading.CancellationToken.None, fileSystemProvider);
+            var result = await component.ExecuteInstructionsAsync(component.Instructions, new List<ModComponent> { component }, System.Threading.CancellationToken.None, fileSystemProvider);
 
             // Should handle empty destination gracefully
             Assert.That(result, Is.Not.Null, "Should return a result even with empty destination");
@@ -236,7 +236,7 @@ namespace KOTORModSync.Tests
             instruction.SetFileSystemProvider(fileSystemProvider);
             instruction.SetParentComponent(component);
 
-            var result = await component.ExecuteInstructionsAsync(new List<ModComponent> { component }, fileSystemProvider, System.Threading.CancellationToken.None, fileSystemProvider);
+            var result = await component.ExecuteInstructionsAsync(component.Instructions, new List<ModComponent> { component }, System.Threading.CancellationToken.None, fileSystemProvider);
 
             // Should handle invalid action type gracefully
             Assert.That(result, Is.Not.Null, "Should return a result even with invalid action type");
@@ -284,14 +284,14 @@ namespace KOTORModSync.Tests
                 instruction.SetParentComponent(component);
             }
 
-            var result = await component.ExecuteInstructionsAsync(new List<ModComponent> { component }, fileSystemProvider, System.Threading.CancellationToken.None, fileSystemProvider);
+            var result = await component.ExecuteInstructionsAsync(component.Instructions, new List<ModComponent> { component }, System.Threading.CancellationToken.None, fileSystemProvider);
 
             Assert.Multiple(() =>
             {
                 Assert.That(result, Is.EqualTo(ModComponent.InstallExitCode.Success), "Should succeed");
-                Assert.That(File.Exists(Path.Combine(_kotorDirectory, "Override", "file1.txt")), Is.True, 
+                Assert.That(File.Exists(Path.Combine(_kotorDirectory, "Override", "file1.txt")), Is.True,
                     "Instruction with selected option dependency should execute");
-                Assert.That(File.Exists(Path.Combine(_kotorDirectory, "Override", "file2.txt")), Is.False, 
+                Assert.That(File.Exists(Path.Combine(_kotorDirectory, "Override", "file2.txt")), Is.False,
                     "Instruction with unselected option dependency should not execute");
             });
         }
@@ -334,14 +334,14 @@ namespace KOTORModSync.Tests
                 instruction.SetParentComponent(component);
             }
 
-            var result = await component.ExecuteInstructionsAsync(new List<ModComponent> { component }, fileSystemProvider, System.Threading.CancellationToken.None, fileSystemProvider);
+            var result = await component.ExecuteInstructionsAsync(component.Instructions, new List<ModComponent> { component }, System.Threading.CancellationToken.None, fileSystemProvider);
 
             Assert.Multiple(() =>
             {
                 Assert.That(result, Is.EqualTo(ModComponent.InstallExitCode.Success), "Should succeed");
-                Assert.That(File.Exists(Path.Combine(_kotorDirectory, "Override", "file1.txt")), Is.False, 
+                Assert.That(File.Exists(Path.Combine(_kotorDirectory, "Override", "file1.txt")), Is.False,
                     "Instruction with active option restriction should not execute");
-                Assert.That(File.Exists(Path.Combine(_kotorDirectory, "Override", "file2.txt")), Is.True, 
+                Assert.That(File.Exists(Path.Combine(_kotorDirectory, "Override", "file2.txt")), Is.True,
                     "Instruction with inactive option restriction should execute");
             });
         }
@@ -384,9 +384,9 @@ namespace KOTORModSync.Tests
             Assert.Multiple(() =>
             {
                 Assert.That(result, Is.EqualTo(ModComponent.InstallExitCode.Success), "Should succeed (skipped)");
-                Assert.That(File.Exists(Path.Combine(_kotorDirectory, "Override", "file1.txt")), Is.False, 
+                Assert.That(File.Exists(Path.Combine(_kotorDirectory, "Override", "file1.txt")), Is.False,
                     "No instructions should execute for unselected component");
-                Assert.That(File.Exists(Path.Combine(_kotorDirectory, "Override", "file2.txt")), Is.False, 
+                Assert.That(File.Exists(Path.Combine(_kotorDirectory, "Override", "file2.txt")), Is.False,
                     "No instructions should execute for unselected component");
             });
         }
@@ -395,10 +395,10 @@ namespace KOTORModSync.Tests
         public async Task ComponentSelection_SelectedButBlockedByRestriction_SkipsInstructions()
         {
             var restrictedComponent = new ModComponent { Name = "Restricted", Guid = Guid.NewGuid(), IsSelected = true };
-            var component = new ModComponent 
-            { 
-                Name = "Blocked Component", 
-                Guid = Guid.NewGuid(), 
+            var component = new ModComponent
+            {
+                Name = "Blocked Component",
+                Guid = Guid.NewGuid(),
                 IsSelected = true,
                 Restrictions = new List<Guid> { restrictedComponent.Guid }
             };
@@ -420,12 +420,12 @@ namespace KOTORModSync.Tests
             }
 
             var result = await component.ExecuteInstructionsAsync(
-                new List<ModComponent> { restrictedComponent, component }, fileSystemProvider, System.Threading.CancellationToken.None, fileSystemProvider);
+                component.Instructions, new List<ModComponent> { restrictedComponent, component }, System.Threading.CancellationToken.None, fileSystemProvider);
 
             Assert.Multiple(() =>
             {
                 Assert.That(result, Is.EqualTo(ModComponent.InstallExitCode.Success), "Should succeed (blocked)");
-                Assert.That(File.Exists(Path.Combine(_kotorDirectory, "Override", "file.txt")), Is.False, 
+                Assert.That(File.Exists(Path.Combine(_kotorDirectory, "Override", "file.txt")), Is.False,
                     "Instructions should not execute when component is blocked");
             });
         }
@@ -454,7 +454,7 @@ namespace KOTORModSync.Tests
             var result = await component.ExecuteSingleInstructionAsync(instruction, 0, new List<ModComponent> { component }, fileSystemProvider);
 
             // Should return appropriate error code
-            Assert.That(result, Is.Not.EqualTo(Instruction.ActionExitCode.Success), 
+            Assert.That(result, Is.Not.EqualTo(Instruction.ActionExitCode.Success),
                 "Should return error code when file not found");
         }
 
@@ -480,7 +480,7 @@ namespace KOTORModSync.Tests
 
             var result = await component.ExecuteSingleInstructionAsync(instruction, 0, new List<ModComponent> { component }, fileSystemProvider);
 
-            Assert.That(result, Is.Not.EqualTo(Instruction.ActionExitCode.Success), 
+            Assert.That(result, Is.Not.EqualTo(Instruction.ActionExitCode.Success),
                 "Should return error code for invalid archive");
         }
 

@@ -77,6 +77,22 @@ I'm honestly not sure what all you need, I was able to build and run it on both 
 - **NET8 or .NET Framework 4.8.0 targeting platform and build tools.**
 - **.NET Standard Development Kit.**
 
+### Vendor dependencies
+
+HoloPatcher.NET is now tracked as a git submodule under `vendor/HoloPatcher.NET`.
+
+Initialize vendor dependencies after cloning:
+
+```bash
+git submodule update --init --recursive
+```
+
+The canonical HoloPatcher.NET source now lives under `vendor/HoloPatcher.NET`. The legacy local trees under `src/HoloPatcher` and `src/HoloPatcher.UI` are being retired and should not be used as the primary upstream for new changes.
+
+### NuGet sources
+
+Package restore sources are defined in `NuGet.config` at the repository root. This includes `nuget.org` and the GitHub Packages feed for `th3w1zard1`, which is the intended remote source for package-based HoloPatcher integration.
+
 All you need to do is build KOTORModSync.GUI. This should build the program into ./KOTORModSync.GUI/bin directory. Or run the command `dotnet build` then `dotnet run` inside KOTORModSync.GUI folder.
 You may alternatively run my publish scripts in the solution directory if you like.
 

@@ -1,10 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\KOTORModSync.props" />
+
   <PropertyGroup>
     <LangVersion>7.3</LangVersion>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <Platforms>AnyCPU;x86;x64;arm64</Platforms>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+    <Version>$(KOTORModSyncVersion)</Version>
+    <AssemblyVersion>$(KOTORModSyncAssemblyVersion)</AssemblyVersion>
+    <FileVersion>$(KOTORModSyncFileVersion)</FileVersion>
+    <PackageId>KOTORModSync.Core</PackageId>
+    <IsPackable>true</IsPackable>
+    <GeneratePackageOnBuild Condition="'$(Configuration)' == 'Release'">true</GeneratePackageOnBuild>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <_NC1>rent</_NC1>
     <_NC2>Mon</_NC2>
   </PropertyGroup>
@@ -57,16 +67,13 @@
   <PropertyGroup>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-    <RepositoryType>git</RepositoryType>
-    <PackageProjectUrl>http://github.com/th3w1zard1/KOTORModSync</PackageProjectUrl>
-    <RepositoryUrl>http://github.com/th3w1zard1/KOTORModSync</RepositoryUrl>
     <Copyright>2025 th3w1zard1</Copyright>
     <Title>KOTORModSync</Title>
     <_NC3>oTor</_NC3>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\LICENSE.txt" Pack="true" PackagePath="" />
+    <None Include="..\..\LICENSE.txt" Pack="true" PackagePath="" />
     <None Include="NLog.config" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 

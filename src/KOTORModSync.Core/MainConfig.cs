@@ -45,6 +45,8 @@ namespace KOTORModSync.Core
     /// </summary>
     public sealed class MainConfig : INotifyPropertyChanged
     {
+        [JetBrains.Annotations.NotNull]
+        public static MainConfig Instance { get; set; } = new MainConfig();
 
         public MainConfig()
         {

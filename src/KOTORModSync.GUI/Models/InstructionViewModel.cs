@@ -64,6 +64,14 @@ namespace KOTORModSync.Models
 
         public bool ShowDependencyInfo { get; set; }
 
+        public InstructionViewModel([NotNull] Instruction instruction)
+            : this(
+                instruction,
+                MainConfig.CurrentComponent ?? MainConfig.AllComponents.FirstOrDefault() ?? new ModComponent { Name = "Instruction", Guid = Guid.Empty },
+                willExecute: true)
+        {
+        }
+
         public InstructionViewModel([NotNull] Instruction instruction, [NotNull] ModComponent parentComponent, bool willExecute, bool showDependencyInfo = false)
         {
             Instruction = instruction ?? throw new ArgumentNullException(nameof(instruction));

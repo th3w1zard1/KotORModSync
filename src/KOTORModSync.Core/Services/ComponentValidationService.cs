@@ -37,6 +37,51 @@ namespace KOTORModSync.Core.Services
 
         }
 
+        public static Task<bool> IsArchiveValidAsync([NotNull] ModComponent component, CancellationToken cancellationToken = default)
+        {
+            if (component is null)
+            {
+                throw new ArgumentNullException(nameof(component));
+            }
+
+            IEnumerable<Instruction> extractInstructions = component.Instructions.Where(i => i.Action == Instruction.ActionType.Extract);
+            foreach (Instruction instruction in extractInstructions)
+            {
+                IEnumerable<string> sources = instruction.Source ?? Array.Empty<string>();
+                foreach (string rawSource in sources)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    string resolvedPath = rawSource ?? string.Empty;
+                    if (MainConfig.SourcePath != null)
+                    {
+                        resolvedPath = resolvedPath.Replace("<<modDirectory>>", MainConfig.SourcePath.FullName, StringComparison.OrdinalIgnoreCase);
+                    }
+
+                    resolvedPath = PathHelper.FixPathFormatting(resolvedPath);
+                    if (!File.Exists(resolvedPath))
+                    {
+                        return Task.FromResult(false);
+                    }
+
+                    try
+                    {
+                        using (var stream = File.OpenRead(resolvedPath))
+                        using (var archive = ArchiveFactory.Open(stream))
+                        {
+                            _ = archive.Entries.Count();
+                        }
+                    }
+                    catch
+                    {
+                        return Task.FromResult(false);
+                    }
+                }
+            }
+
+            return Task.FromResult(true);
+        }
+
         private static string NormalizeFileNameForComparison(string fileName)
         {
             if (string.IsNullOrWhiteSpace(fileName))

@@ -226,6 +226,11 @@ namespace KOTORModSync.Core
         public ModComponent GetParentComponent() => _parentComponent;
         public void SetParentComponent(ModComponent thisComponent) => _parentComponent = thisComponent;
 
+        internal void SetRealPaths(MainConfig _, bool skipExistenceCheck = false)
+        {
+            SetRealPaths(skipExistenceCheck: skipExistenceCheck);
+        }
+
         internal void SetRealPaths(bool sourceIsNotFilePath = false, bool skipExistenceCheck = false)
         {
             if (_fileSystemProvider is null)

@@ -83,7 +83,7 @@ namespace KOTORModSync.Tests.HeadlessUITests
                 var component = MainConfig.AllComponents.First();
                 component.AspyrExclusive = false;
 
-                var selectionService = new ComponentSelectionService(MainConfig.Instance);
+                var selectionService = new ComponentSelectionService(new MainConfig());
                 bool isSelectable = selectionService.IsComponentSelectable(component);
 
                 Assert.True(isSelectable, "Non-Aspyr-exclusive component should be selectable");
@@ -98,20 +98,21 @@ namespace KOTORModSync.Tests.HeadlessUITests
         public async Task ComponentSelection_AspyrExclusive_NotSelectableWhenNotAspyr()
         {
             var window = await CreateWindowAsync(withComponents: true);
+            var config = new MainConfig();
             try
             {
                 await PumpEventsAsync();
                 var component = MainConfig.AllComponents.First();
                 component.AspyrExclusive = true;
 
-                var selectionService = new ComponentSelectionService(MainConfig.Instance);
+                var selectionService = new ComponentSelectionService(config);
                 // DetectGameVersion will set _isAspyrVersion based on destination path
                 // For non-Aspyr, it will be null or false
                 selectionService.DetectGameVersion();
                 bool isSelectable = selectionService.IsComponentSelectable(component);
 
                 // If destination path doesn't exist or is not Aspyr, should not be selectable
-                if (MainConfig.Instance.destinationPath == null || !MainConfig.Instance.destinationPath.Exists)
+                if (config.destinationPath == null || !config.destinationPath.Exists)
                 {
                     Assert.False(isSelectable, "Aspyr-exclusive component should not be selectable when destination path not set");
                 }
@@ -144,7 +145,7 @@ namespace KOTORModSync.Tests.HeadlessUITests
 
                 MainConfig.AllComponents = new List<ModComponent> { depComponent, component };
 
-                var selectionService = new ComponentSelectionService(MainConfig.Instance);
+                var selectionService = new ComponentSelectionService(new MainConfig());
                 var visited = new HashSet<ModComponent>();
                 selectionService.HandleComponentChecked(component, visited);
 
@@ -177,7 +178,7 @@ namespace KOTORModSync.Tests.HeadlessUITests
 
                 MainConfig.AllComponents = new List<ModComponent> { baseComponent, dependentComponent };
 
-                var selectionService = new ComponentSelectionService(MainConfig.Instance);
+                var selectionService = new ComponentSelectionService(new MainConfig());
                 var visited = new HashSet<ModComponent>();
                 selectionService.HandleComponentUnchecked(baseComponent, visited);
 
@@ -214,7 +215,7 @@ namespace KOTORModSync.Tests.HeadlessUITests
 
                 MainConfig.AllComponents = new List<ModComponent> { restrictedComponent, component };
 
-                var selectionService = new ComponentSelectionService(MainConfig.Instance);
+                var selectionService = new ComponentSelectionService(new MainConfig());
                 var visited = new HashSet<ModComponent>();
                 selectionService.HandleComponentChecked(component, visited);
 
@@ -247,7 +248,7 @@ namespace KOTORModSync.Tests.HeadlessUITests
 
                 MainConfig.AllComponents = new List<ModComponent> { component, restrictedComponent };
 
-                var selectionService = new ComponentSelectionService(MainConfig.Instance);
+                var selectionService = new ComponentSelectionService(new MainConfig());
                 var visited = new HashSet<ModComponent>();
                 selectionService.HandleComponentChecked(restrictedComponent, visited);
 
@@ -287,7 +288,7 @@ namespace KOTORModSync.Tests.HeadlessUITests
 
                 MainConfig.AllComponents = new List<ModComponent> { parentComponent, component };
 
-                var selectionService = new ComponentSelectionService(MainConfig.Instance);
+                var selectionService = new ComponentSelectionService(new MainConfig());
                 var visited = new HashSet<ModComponent>();
                 selectionService.HandleComponentChecked(component, visited);
 
@@ -322,9 +323,9 @@ namespace KOTORModSync.Tests.HeadlessUITests
 
                 MainConfig.AllComponents = new List<ModComponent> { depComponent, parentComponent };
 
-                var selectionService = new ComponentSelectionService(MainConfig.Instance);
-                var visited = new HashSet<Option>();
-                selectionService.ValidateAndResolveOptionDependencies(option, visited);
+                option.IsSelected = true;
+                var selectionService = new ComponentSelectionService(new MainConfig());
+                selectionService.HandleOptionChecked(option, parentComponent);
 
                 await PumpEventsAsync();
 
@@ -361,9 +362,9 @@ namespace KOTORModSync.Tests.HeadlessUITests
 
                 MainConfig.AllComponents = new List<ModComponent> { restrictedComponent, parentComponent };
 
-                var selectionService = new ComponentSelectionService(MainConfig.Instance);
-                var visited = new HashSet<Option>();
-                selectionService.ValidateAndResolveOptionDependencies(option, visited);
+                option.IsSelected = true;
+                var selectionService = new ComponentSelectionService(new MainConfig());
+                selectionService.HandleOptionChecked(option, parentComponent);
 
                 await PumpEventsAsync();
 
@@ -397,7 +398,7 @@ namespace KOTORModSync.Tests.HeadlessUITests
 
                 MainConfig.AllComponents = new List<ModComponent> { parentComponent, component };
 
-                var selectionService = new ComponentSelectionService(MainConfig.Instance);
+                var selectionService = new ComponentSelectionService(new MainConfig());
                 var visited = new HashSet<ModComponent>();
                 selectionService.HandleComponentChecked(component, visited);
 
@@ -441,7 +442,7 @@ namespace KOTORModSync.Tests.HeadlessUITests
 
                 MainConfig.AllComponents = new List<ModComponent> { component1, component2 };
 
-                var selectionService = new ComponentSelectionService(MainConfig.Instance);
+                var selectionService = new ComponentSelectionService(new MainConfig());
                 var visited = new HashSet<ModComponent>();
                 selectionService.HandleComponentChecked(component1, visited);
 
@@ -485,7 +486,7 @@ namespace KOTORModSync.Tests.HeadlessUITests
 
                 MainConfig.AllComponents = new List<ModComponent> { modA, modB, modC };
 
-                var selectionService = new ComponentSelectionService(MainConfig.Instance);
+                var selectionService = new ComponentSelectionService(new MainConfig());
                 var visited = new HashSet<ModComponent>();
                 selectionService.HandleComponentChecked(modC, visited);
 
@@ -526,7 +527,7 @@ namespace KOTORModSync.Tests.HeadlessUITests
 
                 MainConfig.AllComponents = new List<ModComponent> { modA, modB, modC };
 
-                var selectionService = new ComponentSelectionService(MainConfig.Instance);
+                var selectionService = new ComponentSelectionService(new MainConfig());
                 var visited = new HashSet<ModComponent>();
                 selectionService.HandleComponentChecked(modC, visited);
 
@@ -566,7 +567,7 @@ namespace KOTORModSync.Tests.HeadlessUITests
 
                 MainConfig.AllComponents = new List<ModComponent> { depComponent, restrictedComponent, component };
 
-                var selectionService = new ComponentSelectionService(MainConfig.Instance);
+                var selectionService = new ComponentSelectionService(new MainConfig());
                 var visited = new HashSet<ModComponent>();
                 selectionService.HandleComponentChecked(component, visited);
 

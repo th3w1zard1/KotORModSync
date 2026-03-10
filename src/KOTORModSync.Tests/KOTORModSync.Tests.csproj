@@ -1,5 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\KOTORModSync.props" />
+
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>disable</ImplicitUsings>
@@ -10,6 +12,9 @@
     <OutputType>Exe</OutputType>
     <GenerateProgramFile>false</GenerateProgramFile>
     <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
+    <Version>$(KOTORModSyncVersion)</Version>
+    <AssemblyVersion>$(KOTORModSyncAssemblyVersion)</AssemblyVersion>
+    <FileVersion>$(KOTORModSyncFileVersion)</FileVersion>
   </PropertyGroup>
 
   <!-- Release Configuration -->

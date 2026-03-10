@@ -77,18 +77,19 @@ namespace KOTORModSync.Tests.HeadlessUITests
         public async Task StepProgress_Step1_CompleteWhenPathsSet()
         {
             var window = await CreateWindowAsync();
+            var config = new MainConfig();
             try
             {
                 await PumpEventsAsync();
                 await Dispatcher.UIThread.InvokeAsync(() =>
                 {
-                    MainConfig.Instance.sourcePath = new System.IO.DirectoryInfo(System.IO.Path.GetTempPath());
-                    MainConfig.Instance.destinationPath = new System.IO.DirectoryInfo(System.IO.Path.GetTempPath());
+                    config.sourcePath = new System.IO.DirectoryInfo(System.IO.Path.GetTempPath());
+                    config.destinationPath = new System.IO.DirectoryInfo(System.IO.Path.GetTempPath());
                 }, DispatcherPriority.Background);
 
                 await PumpEventsAsync();
 
-                var validationService = new ValidationService(MainConfig.Instance);
+                var validationService = new ValidationService(config);
                 bool step1Complete = ValidationService.IsStep1Complete();
 
                 Assert.True(step1Complete, "Step 1 should be complete when paths are set");
@@ -103,18 +104,19 @@ namespace KOTORModSync.Tests.HeadlessUITests
         public async Task StepProgress_Step2_CompleteWhenComponentsLoaded()
         {
             var window = await CreateWindowAsync(withComponents: true);
+            var config = new MainConfig();
             try
             {
                 await PumpEventsAsync();
                 await Dispatcher.UIThread.InvokeAsync(() =>
                 {
-                    MainConfig.Instance.sourcePath = new System.IO.DirectoryInfo(System.IO.Path.GetTempPath());
-                    MainConfig.Instance.destinationPath = new System.IO.DirectoryInfo(System.IO.Path.GetTempPath());
+                    config.sourcePath = new System.IO.DirectoryInfo(System.IO.Path.GetTempPath());
+                    config.destinationPath = new System.IO.DirectoryInfo(System.IO.Path.GetTempPath());
                 }, DispatcherPriority.Background);
 
                 await PumpEventsAsync();
 
-                var validationService = new ValidationService(MainConfig.Instance);
+                var validationService = new ValidationService(config);
                 bool step1Complete = ValidationService.IsStep1Complete();
                 bool step2Complete = step1Complete && MainConfig.AllComponents?.Count > 0;
 
@@ -130,13 +132,14 @@ namespace KOTORModSync.Tests.HeadlessUITests
         public async Task StepProgress_Step3_CompleteWhenComponentsSelected()
         {
             var window = await CreateWindowAsync(withComponents: true);
+            var config = new MainConfig();
             try
             {
                 await PumpEventsAsync();
                 await Dispatcher.UIThread.InvokeAsync(() =>
                 {
-                    MainConfig.Instance.sourcePath = new System.IO.DirectoryInfo(System.IO.Path.GetTempPath());
-                    MainConfig.Instance.destinationPath = new System.IO.DirectoryInfo(System.IO.Path.GetTempPath());
+                    config.sourcePath = new System.IO.DirectoryInfo(System.IO.Path.GetTempPath());
+                    config.destinationPath = new System.IO.DirectoryInfo(System.IO.Path.GetTempPath());
                     MainConfig.AllComponents.First().IsSelected = true;
                 }, DispatcherPriority.Background);
 
@@ -156,13 +159,14 @@ namespace KOTORModSync.Tests.HeadlessUITests
         public async Task StepProgress_Step4_CompleteWhenAllDownloaded()
         {
             var window = await CreateWindowAsync(withComponents: true);
+            var config = new MainConfig();
             try
             {
                 await PumpEventsAsync();
                 await Dispatcher.UIThread.InvokeAsync(() =>
                 {
-                    MainConfig.Instance.sourcePath = new System.IO.DirectoryInfo(System.IO.Path.GetTempPath());
-                    MainConfig.Instance.destinationPath = new System.IO.DirectoryInfo(System.IO.Path.GetTempPath());
+                    config.sourcePath = new System.IO.DirectoryInfo(System.IO.Path.GetTempPath());
+                    config.destinationPath = new System.IO.DirectoryInfo(System.IO.Path.GetTempPath());
                     var component = MainConfig.AllComponents.First();
                     component.IsSelected = true;
                     component.IsDownloaded = true;
@@ -185,13 +189,14 @@ namespace KOTORModSync.Tests.HeadlessUITests
         public async Task StepProgress_Step4_IncompleteWhenNotAllDownloaded()
         {
             var window = await CreateWindowAsync(withComponents: true);
+            var config = new MainConfig();
             try
             {
                 await PumpEventsAsync();
                 await Dispatcher.UIThread.InvokeAsync(() =>
                 {
-                    MainConfig.Instance.sourcePath = new System.IO.DirectoryInfo(System.IO.Path.GetTempPath());
-                    MainConfig.Instance.destinationPath = new System.IO.DirectoryInfo(System.IO.Path.GetTempPath());
+                    config.sourcePath = new System.IO.DirectoryInfo(System.IO.Path.GetTempPath());
+                    config.destinationPath = new System.IO.DirectoryInfo(System.IO.Path.GetTempPath());
                     var component1 = new ModComponent { Name = "Mod 1", Guid = Guid.NewGuid(), IsSelected = true, IsDownloaded = true };
                     var component2 = new ModComponent { Name = "Mod 2", Guid = Guid.NewGuid(), IsSelected = true, IsDownloaded = false };
                     MainConfig.AllComponents = new List<ModComponent> { component1, component2 };
@@ -369,26 +374,26 @@ namespace KOTORModSync.Tests.HeadlessUITests
                 await PumpEventsAsync();
                 await Dispatcher.UIThread.InvokeAsync(() =>
                 {
-                    var component1 = new ModComponent 
-                    { 
-                        Name = "Mod 1", 
-                        Guid = Guid.NewGuid(), 
+                    var component1 = new ModComponent
+                    {
+                        Name = "Mod 1",
+                        Guid = Guid.NewGuid(),
                         IsSelected = true,
                         IsDownloaded = true,
                         InstallState = ModComponent.ComponentInstallState.Completed
                     };
-                    var component2 = new ModComponent 
-                    { 
-                        Name = "Mod 2", 
-                        Guid = Guid.NewGuid(), 
+                    var component2 = new ModComponent
+                    {
+                        Name = "Mod 2",
+                        Guid = Guid.NewGuid(),
                         IsSelected = false,
                         IsDownloaded = false,
                         InstallState = ModComponent.ComponentInstallState.Pending
                     };
-                    var component3 = new ModComponent 
-                    { 
-                        Name = "Mod 3", 
-                        Guid = Guid.NewGuid(), 
+                    var component3 = new ModComponent
+                    {
+                        Name = "Mod 3",
+                        Guid = Guid.NewGuid(),
                         IsSelected = true,
                         IsDownloaded = false,
                         InstallState = ModComponent.ComponentInstallState.Failed

@@ -36,7 +36,6 @@ namespace KOTORModSync.Tests
                 sourcePath = new DirectoryInfo(_modDirectory),
                 destinationPath = new DirectoryInfo(_kotorDirectory)
             };
-            MainConfig.Instance = _config;
         }
 
         [TearDown]
@@ -60,8 +59,7 @@ namespace KOTORModSync.Tests
         [Test]
         public async Task CaseInsensitivePathing_Enabled_HandlesCaseVariations()
         {
-            _config.CaseInsensitivePathing = true;
-            MainConfig.Instance = _config;
+            _config.caseInsensitivePathing = true;
 
             File.WriteAllText(Path.Combine(_modDirectory, "File.txt"), "content");
 
@@ -79,13 +77,13 @@ namespace KOTORModSync.Tests
             instruction.SetFileSystemProvider(fileSystemProvider);
             instruction.SetParentComponent(component);
 
-            var result = await component.ExecuteInstructionsAsync(new List<ModComponent> { component }, fileSystemProvider, System.Threading.CancellationToken.None, fileSystemProvider);
+            var result = await component.ExecuteInstructionsAsync(component.Instructions, new List<ModComponent> { component }, System.Threading.CancellationToken.None, fileSystemProvider);
 
             Assert.Multiple(() =>
             {
-                Assert.That(result, Is.EqualTo(ModComponent.InstallExitCode.Success), 
+                Assert.That(result, Is.EqualTo(ModComponent.InstallExitCode.Success),
                     "Case insensitive should match different case");
-                Assert.That(File.Exists(Path.Combine(_kotorDirectory, "Override", "FILE.TXT")), Is.True, 
+                Assert.That(File.Exists(Path.Combine(_kotorDirectory, "Override", "FILE.TXT")), Is.True,
                     "File should be moved with case-insensitive matching");
             });
         }
@@ -93,8 +91,7 @@ namespace KOTORModSync.Tests
         [Test]
         public async Task CaseInsensitivePathing_Disabled_RequiresExactCase()
         {
-            _config.CaseInsensitivePathing = false;
-            MainConfig.Instance = _config;
+            _config.caseInsensitivePathing = false;
 
             File.WriteAllText(Path.Combine(_modDirectory, "File.txt"), "content");
 
@@ -112,7 +109,7 @@ namespace KOTORModSync.Tests
             instruction.SetFileSystemProvider(fileSystemProvider);
             instruction.SetParentComponent(component);
 
-            var result = await component.ExecuteInstructionsAsync(new List<ModComponent> { component }, fileSystemProvider, System.Threading.CancellationToken.None, fileSystemProvider);
+            var result = await component.ExecuteInstructionsAsync(component.Instructions, new List<ModComponent> { component }, System.Threading.CancellationToken.None, fileSystemProvider);
 
             // On Windows, file system is case-insensitive, so this might still succeed
             // On Linux/Mac, this would fail
@@ -148,12 +145,11 @@ namespace KOTORModSync.Tests
             }
 
             // Execute first instruction
-            await component.ExecuteSingleInstructionAsync(component.Instructions[0], 0, 
+            await component.ExecuteSingleInstructionAsync(component.Instructions[0], 0,
                 new List<ModComponent> { component }, fileSystemProvider);
 
             // Change configuration
-            _config.CaseInsensitivePathing = !_config.CaseInsensitivePathing;
-            MainConfig.Instance = _config;
+            _config.caseInsensitivePathing = !_config.caseInsensitivePathing;
 
             // Add and execute second instruction
             component.Instructions.Add(new Instruction
@@ -166,9 +162,9 @@ namespace KOTORModSync.Tests
             component.Instructions[1].SetFileSystemProvider(fileSystemProvider);
             component.Instructions[1].SetParentComponent(component);
 
-            var result = await component.ExecuteInstructionsAsync(new List<ModComponent> { component }, fileSystemProvider, System.Threading.CancellationToken.None, fileSystemProvider);
+            var result = await component.ExecuteInstructionsAsync(component.Instructions, new List<ModComponent> { component }, System.Threading.CancellationToken.None, fileSystemProvider);
 
-            Assert.That(result, Is.EqualTo(ModComponent.InstallExitCode.Success), 
+            Assert.That(result, Is.EqualTo(ModComponent.InstallExitCode.Success),
                 "Configuration change should not break execution");
         }
 
@@ -195,13 +191,13 @@ namespace KOTORModSync.Tests
             instruction.SetFileSystemProvider(fileSystemProvider);
             instruction.SetParentComponent(component);
 
-            var result = await component.ExecuteInstructionsAsync(new List<ModComponent> { component }, fileSystemProvider, System.Threading.CancellationToken.None, fileSystemProvider);
+            var result = await component.ExecuteInstructionsAsync(component.Instructions, new List<ModComponent> { component }, System.Threading.CancellationToken.None, fileSystemProvider);
 
             Assert.Multiple(() =>
             {
-                Assert.That(result, Is.EqualTo(ModComponent.InstallExitCode.Success), 
+                Assert.That(result, Is.EqualTo(ModComponent.InstallExitCode.Success),
                     "Path placeholders should resolve");
-                Assert.That(File.Exists(Path.Combine(_kotorDirectory, "Override", "file.txt")), Is.True, 
+                Assert.That(File.Exists(Path.Combine(_kotorDirectory, "Override", "file.txt")), Is.True,
                     "File should be moved to resolved path");
             });
         }
